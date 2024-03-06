@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "674300213164",
+    "project_id": "newspulse-e8c14",
+    "storage_bucket": "newspulse-e8c14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674300213164:android:cd25fef5c0c49be9bbec09",
+        "android_client_info": {
+          "package_name": "com.example.newspulse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCstuZblVRlNYLP1cuFgGpEZyxOApgbt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

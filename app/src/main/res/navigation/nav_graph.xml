@@ -18,7 +18,11 @@
         android:id="@+id/searchFragment"
         android:name="com.example.newspulse.ui.fragments.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteNewsFragment"
         android:name="com.example.newspulse.ui.fragments.favoritenews.FavoriteNewsFragment"
@@ -29,4 +33,13 @@
         android:name="com.example.newspulse.ui.fragments.webview.WebViewFragment"
         android:label="fragment_web_view"
         tools:layout="@layout/fragment_web_view" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.newspulse.ui.fragments.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+    </fragment>
 </navigation>

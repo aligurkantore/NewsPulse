@@ -1,9 +1,9 @@
 package com.example.newspulse.api
 
 import com.example.newspulse.data.remote.NewsDataResponse
-import com.example.newspulse.utils.Contants.API_KEY
-import com.example.newspulse.utils.Contants.COUNTRY
-import com.example.newspulse.utils.Contants.PAGE_NUMBER
+import com.example.newspulse.utils.Constants.API_KEY
+import com.example.newspulse.utils.Constants.COUNTRY
+import com.example.newspulse.utils.Constants.PAGE_NUMBER
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,6 +1,6 @@
 package com.example.newspulse.utils
 
-object Contants {
+object Constants {
     const val BASE_URL = "https://newsapi.org/"
     const val API_KEY = "324531944cc44c25a52a2bafe12fd38b"
     const val TIME_OUT = 15L

@@ -1,10 +1,17 @@
 package com.example.newspulse.data.remote
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
+@Entity(
+    tableName = "articles"
+)
 data class Article(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
     val author: String? = null,
-    val content: Any? = null,
+    val content: String? = null,
     val description: String? = null,
     val publishedAt: String? = null,
     val source: Source? = null,

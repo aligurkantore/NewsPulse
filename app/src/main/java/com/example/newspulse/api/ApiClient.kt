@@ -1,7 +1,7 @@
 package com.example.newspulse.api
 
-import com.example.newspulse.utils.Contants.BASE_URL
-import com.example.newspulse.utils.Contants.TIME_OUT
+import com.example.newspulse.utils.Constants.BASE_URL
+import com.example.newspulse.utils.Constants.TIME_OUT
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
