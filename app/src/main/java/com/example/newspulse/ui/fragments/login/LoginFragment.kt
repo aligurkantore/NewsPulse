@@ -3,6 +3,8 @@ package com.example.newspulse.ui.fragments.login
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.newspulse.R
 import com.example.newspulse.databinding.FragmentLoginBinding
-import com.example.newspulse.utils.hide
-import com.example.newspulse.utils.show
+import com.example.newspulse.utils.goneIf
+import com.example.newspulse.utils.visibleIf
 
 class LoginFragment : Fragment() {
 
@@ -35,30 +37,28 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setViewModel()
         setupListeners()
-        binding.email.requestFocus()
         setupObservers()
         setupPasswordVisibilityToggle()
-        toggleRegistrationVisibility(false)
+        toggleRegistrationViews(false)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.email.requestFocus()
+        }, 1000)
     }
 
-    private fun setViewModel(){
+    private fun setViewModel() {
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
     }
 
     private fun setupListeners() {
         binding.apply {
             login.setOnClickListener {
-                toggleRegistrationVisibility(false)
-                clearEditText()
-                email.requestFocus()
+                toggleFormVisibility(false)
             }
             register.setOnClickListener {
-                toggleRegistrationVisibility(true)
-                clearEditText()
-                name.requestFocus()
+                toggleFormVisibility(true)
             }
 
-            binding.logRegButton.setOnClickListener {
+            logRegButton.setOnClickListener {
                 val name = name.text.toString()
                 val email = email.text.toString()
                 val password = password.text.toString()
@@ -72,51 +72,61 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun setupObservers() {
-        viewModel.registrationResult.observe(viewLifecycleOwner) {
-            if (it) {
-                findNavController().navigate(R.id.action_loginFragment_to_newsFragment)
-            } else {
-                Toast.makeText(mContext, "", Toast.LENGTH_SHORT).show()
-            }
+    private fun toggleFormVisibility(b: Boolean) {
+        binding.apply {
+            toggleRegistrationViews(b)
+            clearEditTextFields()
+            if (b) name.requestFocus() else email.requestFocus()
         }
+    }
 
-        viewModel.loginResult.observe(viewLifecycleOwner) {
-            if (it) {
-                findNavController().navigate(R.id.action_loginFragment_to_newsFragment)
-            } else {
-                Toast.makeText(mContext, "Login failed", Toast.LENGTH_SHORT).show()
+    private fun setupObservers() {
+        viewModel.apply {
+            registrationResult.observe(viewLifecycleOwner) {
+                if (it) {
+                    findNavController().navigate(R.id.action_loginFragment_to_newsFragment)
+                } else {
+                    Toast.makeText(
+                        mContext, getString(R.string.register_failed), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+            loginResult.observe(viewLifecycleOwner) {
+                if (it) {
+                    findNavController().navigate(R.id.action_loginFragment_to_newsFragment)
+                } else {
+                    Toast.makeText(
+                        mContext, getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
     }
 
-    private fun toggleRegistrationVisibility(isVisible: Boolean): Boolean {
+    private fun toggleRegistrationViews(isVisible: Boolean): Boolean {
         binding.apply {
-            if (isVisible) {
-                name.show()
-                lineLogin.hide()
-                lineRegister.show()
-                register.setTypeface(null, Typeface.BOLD)
-                login.setTypeface(null, Typeface.NORMAL)
-                logRegButton.text = getString(R.string.register)
-            } else {
-                name.hide()
-                lineLogin.show()
-                lineRegister.hide()
-                login.setTypeface(null, Typeface.BOLD)
-                register.setTypeface(null, Typeface.NORMAL)
-                logRegButton.text = getString(R.string.login)
-            }
+            name visibleIf isVisible
+            lineLogin goneIf isVisible
+            lineRegister visibleIf isVisible
+            register.setTypeface(null, if (isVisible) Typeface.BOLD else Typeface.NORMAL)
+            login.setTypeface(null, if (isVisible) Typeface.NORMAL else Typeface.BOLD)
+            logRegButton.text =
+                if (isVisible) getString(R.string.register) else getString(R.string.login)
         }
         return false
     }
 
     private fun togglePasswordVisibility() {
-        val isVisible = binding.password.transformationMethod != null
-        val drawableId = if (isVisible) R.drawable.show else R.drawable.hide
-        val drawable = ContextCompat.getDrawable(mContext, drawableId)
-        binding.password.transformationMethod = if (isVisible) null else PasswordTransformationMethod.getInstance()
-        drawable?.let { binding.password.setCompoundDrawablesWithIntrinsicBounds(null, null, it, null) }
+        binding.password.apply {
+            val isVisible = transformationMethod != null
+            val drawableId = if (isVisible) R.drawable.show else R.drawable.hide
+            val drawable = ContextCompat.getDrawable(mContext, drawableId)
+            transformationMethod =
+                if (isVisible) null else PasswordTransformationMethod.getInstance()
+            setSelection(text?.length ?: 0)
+            drawable?.let { setCompoundDrawablesWithIntrinsicBounds(null, null, it, null) }
+        }
     }
 
     private fun setupPasswordVisibilityToggle() {
@@ -125,7 +135,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun clearEditText(){
+    private fun clearEditTextFields() {
         binding.apply {
             name.text?.clear()
             email.text?.clear()

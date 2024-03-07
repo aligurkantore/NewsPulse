@@ -6,4 +6,5 @@ object Constants {
     const val TIME_OUT = 15L
     const val COUNTRY = "us"
     const val PAGE_NUMBER = 1
+    const val URL = "url"
 }

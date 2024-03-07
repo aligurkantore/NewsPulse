@@ -1,14 +1,9 @@
 package com.example.newspulse.utils
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 fun ImageView.loadImage(url: String) {
@@ -30,19 +25,26 @@ fun Long.formatTimestamp(pattern: String = "dd MM yyyy"): String {
 }
 
 
-fun View.show(){
+fun View.visible() {
     visibility = View.VISIBLE
 }
-fun View.hide(){
+
+fun View.gone() {
     visibility = View.GONE
 }
 
-fun showToast(context : Context){
-    Toast.makeText(context, "You entered incomplete information", Toast.LENGTH_SHORT).show()
+fun View.inVisible() {
+    visibility = View.INVISIBLE
 }
 
-/*
-fun Int.toFormattedString(): String {
-    return String.format(Locale.getDefault(), "%,d", this)
+infix fun View.visibleIf(b: Boolean) {
+    if (b) visible() else gone()
 }
- */
+
+infix fun View.inVisibleIf(b: Boolean){
+    if (b) inVisible() else visible()
+}
+
+infix fun View.goneIf(b: Boolean){
+    if (b) gone() else visible()
+}

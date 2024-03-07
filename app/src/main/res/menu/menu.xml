@@ -5,9 +5,6 @@
         android:title=""
         android:icon="@drawable/news"/>
 
-    <item android:id="@+id/searchFragment"
-        android:title=""
-        android:icon="@drawable/search"/>
 
     <item android:id="@+id/favoriteNewsFragment"
         android:title=""

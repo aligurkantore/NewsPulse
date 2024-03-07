@@ -66,8 +66,4 @@ class NewsViewModel @Inject constructor(private var repository : NewsRepository)
         getNewsList(PAGE_NUMBER)
     }
 
-
-    override fun onCleared() {
-        super.onCleared()
-    }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.example.newspulse.data.remote.Article
 import com.example.newspulse.databinding.FragmentWebViewBinding
 import com.example.newspulse.ui.fragments.news.NewsViewModel
+import com.example.newspulse.utils.Constants.URL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,8 +38,8 @@ class WebViewFragment : Fragment() {
         loadWebViewUrl()
     }
 
-    private fun loadWebViewUrl(){
-        val url = arguments?.getString("url") ?: ""
+    private fun loadWebViewUrl() {
+        val url = arguments?.getString(URL)
         binding?.webView?.apply {
             settings.javaScriptEnabled
             webViewClient = object : WebViewClient() {
@@ -52,10 +53,13 @@ class WebViewFragment : Fragment() {
                     viewModel?.setLoading(true)
                 }
             }
-            loadUrl(url)
+            if (url != null) {
+                loadUrl(url)
+            }
         }
         addToFavorites(article)
     }
+
     private fun addToFavorites(article: Article) {
         mViewModel?.addToFavorites(article)
         binding?.clickFavoriteButton?.setOnClickListener {

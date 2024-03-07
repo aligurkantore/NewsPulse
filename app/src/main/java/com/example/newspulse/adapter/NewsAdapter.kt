@@ -11,7 +11,7 @@ import com.example.newspulse.utils.toUnixTimestamp
 
 class NewsAdapter(
     private val newsList: List<Article>,
-    private val itemClickListener: ItemClickListener,
+    private val clickListener: ItemClickListener,
 ) : RecyclerView.Adapter<NewsAdapter.NewsVH>() {
 
     inner class NewsVH(val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root)
@@ -38,7 +38,7 @@ class NewsAdapter(
             textDate.text = data.publishedAt?.toUnixTimestamp()?.formatTimestamp()
 
             container.setOnClickListener {
-                itemClickListener.onClick(data)
+                clickListener.onClick(data)
             }
         }
 

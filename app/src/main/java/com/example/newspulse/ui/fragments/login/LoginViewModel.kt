@@ -38,9 +38,4 @@ class LoginViewModel() : ViewModel() {
         }
 
     }
-
-
-    fun togglePasswordVisibility(visibility: Boolean): Boolean {
-        return !visibility
-    }
 }
