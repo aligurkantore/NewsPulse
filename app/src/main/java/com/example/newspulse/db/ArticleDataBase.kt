@@ -15,15 +15,15 @@ import com.example.newspulse.data.remote.Article
 @TypeConverters(Converters::class)
 abstract class ArticleDataBase : RoomDatabase() {
 
-    abstract fun getArticleDao() : ArticleDAO
+    abstract fun getArticleDao(): ArticleDAO
 
-    companion object{
+    companion object {
         @Volatile
-        private var instance : ArticleDataBase? = null
+        private var instance: ArticleDataBase? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-            instance ?: createDatabase(context).also{
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: createDatabase(context).also {
                 instance = it
             }
         }

@@ -1,7 +1,6 @@
 package com.example.newspulse.ui.activities
 
 import android.app.AlertDialog
-import android.app.ProgressDialog.show
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding?.bottomNavigationView?.visibility = when (destination.id) {
-                R.id.newsFragment, R.id.webViewFragment -> View.VISIBLE
+                R.id.newsFragment, R.id.webViewFragment, R.id.favoriteNewsFragment -> View.VISIBLE
                 else -> View.GONE
             }
         }
@@ -48,6 +47,10 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView = it.bottomNavigationView
             NavigationUI.setupWithNavController(bottomNavigationView, navController)
         }
+
+        val layoutParams = bottomNavigationView.layoutParams
+        layoutParams.height = resources.getDimensionPixelSize(R.dimen.bottom_navigation_height)
+        bottomNavigationView.layoutParams = layoutParams
     }
 
     override fun onBackPressed() {
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         builder.setMessage(getString(R.string.message_exit))
         builder.setPositiveButton(R.string.yes) { dialog, _ ->
             dialog.dismiss()
-            finish()
+            finishAffinity()
         }
         builder.setNegativeButton(R.string.no) { dialog, _ ->
             dialog.dismiss()

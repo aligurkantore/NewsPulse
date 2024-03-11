@@ -1,10 +1,10 @@
 package com.example.newspulse.ui.fragments.news
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newspulse.data.remote.Article
 import com.example.newspulse.data.remote.NewsDataResponse
 import com.example.newspulse.repository.news.NewsRepository
 import com.example.newspulse.utils.Constants.PAGE_NUMBER
@@ -20,13 +20,16 @@ class NewsViewModel @Inject constructor(private var repository : NewsRepository)
     private val _newsLiveData = MutableLiveData<NewsDataResponse>()
     val newsLiveData: LiveData<NewsDataResponse> = _newsLiveData
 
-   private val _searchNewsLiveData = MutableLiveData<NewsDataResponse>()
+    private val _searchNewsLiveData = MutableLiveData<NewsDataResponse>()
     val searchNewsLiveData: LiveData<NewsDataResponse> = _searchNewsLiveData
 
     val query = MutableLiveData<String>().also { it.value = null }
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _authorNewsData = MutableLiveData<List<Article>?>()
+    val authorNames: LiveData<List<Article>?> = _authorNewsData
 
     fun setLoading(isLoading: Boolean) {
         _isLoading.value = isLoading
@@ -35,14 +38,13 @@ class NewsViewModel @Inject constructor(private var repository : NewsRepository)
         getNewsList(PAGE_NUMBER)
     }
 
-    private fun getNewsList(pageNumber : Int){
+     fun getNewsList(pageNumber : Int){
         viewModelScope.launch(Dispatchers.IO){
             val response = repository.getNewsList(pageNumber)
             withContext(Dispatchers.Main){
                 if (response.isSuccessful){
                     response.body()?.let {
                         _newsLiveData.postValue(it)
-                        Log.d("agt", "getNewsList:${response.body()} ")
                     }
                 }
             }
@@ -62,8 +64,13 @@ class NewsViewModel @Inject constructor(private var repository : NewsRepository)
         }
     }
 
-    fun loadOriginalData() {
-        getNewsList(PAGE_NUMBER)
+    fun filterNewsByAuthor(author: String) {
+        val articles = newsLiveData.value?.articles ?: return // Eger articles null ise islevi burada sonlandir
+        val filteredNews = articles.filter {
+            it.author == author
+        }
+        viewModelScope.launch {
+            _authorNewsData.postValue(filteredNews)
+        }
     }
-
 }

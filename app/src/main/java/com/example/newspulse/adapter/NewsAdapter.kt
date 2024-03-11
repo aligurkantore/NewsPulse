@@ -33,7 +33,6 @@ class NewsAdapter(
                     imageNews.loadImage(it)
                 }
             }
-            nameAuthor.text = data.author
             descriptionNews.text = data.description
             textDate.text = data.publishedAt?.toUnixTimestamp()?.formatTimestamp()
 
@@ -41,7 +40,6 @@ class NewsAdapter(
                 clickListener.onClick(data)
             }
         }
-
     }
 
     interface ItemClickListener {

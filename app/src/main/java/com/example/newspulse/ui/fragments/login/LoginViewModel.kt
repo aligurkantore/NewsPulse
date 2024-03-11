@@ -3,6 +3,7 @@ package com.example.newspulse.ui.fragments.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.newspulse.utils.containsTurkishCharacters
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel() : ViewModel() {
@@ -17,7 +18,8 @@ class LoginViewModel() : ViewModel() {
 
 
     fun registerUser(name: String, email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()) {
+        if ((email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty())
+            && !email.containsTurkishCharacters()) {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     _registrationResult.value = task.isSuccessful
@@ -28,7 +30,7 @@ class LoginViewModel() : ViewModel() {
     }
 
     fun loginUser(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
+        if ((email.isNotEmpty() && password.isNotEmpty()) && !email.containsTurkishCharacters()) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     _loginResult.value = task.isSuccessful

@@ -33,7 +33,7 @@
                 android:padding="10dp"
                 tools:text="TITLE"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,13 +42,6 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/name_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Source"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/text_date"

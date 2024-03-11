@@ -25,6 +25,11 @@ class WebViewFragment : Fragment() {
     private lateinit var mContext: Context
     private var article = Article()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -50,7 +55,7 @@ class WebViewFragment : Fragment() {
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    viewModel?.setLoading(true)
+                    viewModel?.setLoading(true) //todo ????
                 }
             }
             if (url != null) {
@@ -67,10 +72,4 @@ class WebViewFragment : Fragment() {
         }
 
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
-
 }

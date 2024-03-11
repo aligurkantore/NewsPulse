@@ -1,5 +1,6 @@
 package com.example.newspulse.ui.fragments.login
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,6 +27,11 @@ class LoginFragment : Fragment() {
     private lateinit var viewModel: LoginViewModel
     private lateinit var mContext: Context
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -40,9 +47,7 @@ class LoginFragment : Fragment() {
         setupObservers()
         setupPasswordVisibilityToggle()
         toggleRegistrationViews(false)
-        Handler(Looper.getMainLooper()).postDelayed({
-            binding.email.requestFocus()
-        }, 1000)
+        setupKeyboardHiding()
     }
 
     private fun setViewModel() {
@@ -76,6 +81,7 @@ class LoginFragment : Fragment() {
         binding.apply {
             toggleRegistrationViews(b)
             clearEditTextFields()
+            showKeyboard()
             if (b) name.requestFocus() else email.requestFocus()
         }
     }
@@ -87,7 +93,8 @@ class LoginFragment : Fragment() {
                     findNavController().navigate(R.id.action_loginFragment_to_newsFragment)
                 } else {
                     Toast.makeText(
-                        mContext, getString(R.string.register_failed), Toast.LENGTH_SHORT)
+                        mContext, getString(R.string.register_failed), Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -97,7 +104,8 @@ class LoginFragment : Fragment() {
                     findNavController().navigate(R.id.action_loginFragment_to_newsFragment)
                 } else {
                     Toast.makeText(
-                        mContext, getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                        mContext, getString(R.string.login_failed), Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -114,7 +122,7 @@ class LoginFragment : Fragment() {
             logRegButton.text =
                 if (isVisible) getString(R.string.register) else getString(R.string.login)
         }
-        return false
+        return true
     }
 
     private fun togglePasswordVisibility() {
@@ -143,8 +151,31 @@ class LoginFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
+    override fun onResume() {
+        super.onResume()
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.email.requestFocus()
+            showKeyboard()
+        }, 1000)
+    }
+
+    private fun showKeyboard() {
+        val methodManager =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        methodManager.showSoftInput(binding.email, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun hideKeyboard() {
+        val methodManager =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        methodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupKeyboardHiding() {
+        view?.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            true
+        }
     }
 }
